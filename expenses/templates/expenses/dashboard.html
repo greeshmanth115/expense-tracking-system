@@ -1,0 +1,77 @@
+{% extends "expenses/base.html" %}
+{% block content %}
+<div class="stats">
+  <div class="stat success">
+    <h4>Total Income</h4>
+    <div class="val">${{ total_income }}</div>
+  </div>
+  <div class="stat">
+    <h4>Total Expense</h4>
+    <div class="val">${{ total_expense }}</div>
+  </div>
+  <div class="stat {% if balance < 0 %}danger{% else %}accent{% endif %}">
+    <h4>Balance</h4>
+    <div class="val">${{ balance }}</div>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat success">
+    <h4>This Month Income</h4>
+    <div class="val">${{ month_income }}</div>
+  </div>
+  <div class="stat">
+    <h4>This Month Expense</h4>
+    <div class="val">${{ month_expense }}</div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Spending by Category</h3>
+  {% for c in by_category %}
+  <div class="bar-row">
+    <div class="bar-label">{{ c.label }}</div>
+    <div class="bar-track"><div class="bar-fill" style="width:{{ c.pct }}%"></div></div>
+    <div class="bar-amt">${{ c.total }}</div>
+  </div>
+  {% empty %}
+  <p>No expenses yet — <a href="{% url 'expense_add' %}">add your first one</a>.</p>
+  {% endfor %}
+</div>
+
+<div class="card">
+  <h3>Recent Expenses</h3>
+  <table>
+    <tr><th>Date</th><th>Title</th><th>Category</th><th>Amount</th></tr>
+    {% for e in recent_expenses %}
+    <tr>
+      <td>{{ e.date }}</td>
+      <td>{{ e.title }}</td>
+      <td><span class="badge">{{ e.get_category_display }}</span></td>
+      <td class="amt-neg">-${{ e.amount }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="4">Nothing here yet.</td></tr>
+    {% endfor %}
+  </table>
+</div>
+
+<div class="card">
+  <h3>Recent Income</h3>
+  <table>
+    <tr><th>Date</th><th>Title</th><th>Source</th><th>Amount</th></tr>
+    {% for i in recent_income %}
+    <tr>
+      <td>{{ i.date }}</td>
+      <td>{{ i.title }}</td>
+      <td><span class="badge">{{ i.get_source_display }}</span></td>
+      <td class="amt-pos">+${{ i.amount }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="4">Nothing here yet.</td></tr>
+    {% endfor %}
+  </table>
+</div>
+
+<a class="btn" href="{% url 'report' %}">🧾 View Full Report</a>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "expenses/base.html" %}
+{% block content %}
+<div class="card">
+  <h3>All Income <span class="badge">Total: ${{ total }}</span></h3>
+  <p>
+    <a href="{% url 'income_list' %}" class="{% if not selected_source %}badge{% endif %}">All</a>
+    {% for value, label in sources %}
+      &nbsp;|&nbsp; <a href="?source={{ value }}" class="{% if selected_source == value %}badge{% endif %}">{{ label }}</a>
+    {% endfor %}
+  </p>
+</div>
+<table>
+<tr><th>Date</th><th>Title</th><th>Source</th><th>Amount</th><th>Actions</th></tr>
+{% for i in incomes %}
+<tr>
+  <td>{{ i.date }}</td>
+  <td>{{ i.title }}</td>
+  <td>{{ i.get_source_display }}</td>
+  <td class="amt-pos">+${{ i.amount }}</td>
+  <td>
+    <a href="{% url 'income_edit' i.pk %}">Edit</a> |
+    <a href="{% url 'income_delete' i.pk %}" style="color:var(--danger)">Delete</a>
+  </td>
+</tr>
+{% empty %}
+<tr><td colspan="5">No income recorded yet.</td></tr>
+{% endfor %}
+</table>
+{% endblock %}

@@ -1,11 +1,10 @@
-{% extends "expenses/base.html" %}
-{% block content %}
+{% extends "expenses/base.html" %} {% block content %}
 <div class="card">
-<p>Delete "<b>{{ obj.title }}</b>" (${{ obj.amount }})?</p>
-<form method="post">
-  {% csrf_token %}
-  <button class="btn btn-danger" type="submit">Yes, Delete</button>
-  <a href="{% url back %}" class="btn btn-outline">Cancel</a>
-</form>
+  <p>Delete "<b>{{ obj.title }}</b>" (${{ obj.amount }})?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button class="btn btn-danger" type="submit">Yes, Delete</button>
+    <a href="{% url back %}" class="btn btn-outline">Cancel</a>
+  </form>
 </div>
 {% endblock %}

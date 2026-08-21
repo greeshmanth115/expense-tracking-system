@@ -1,12 +1,10 @@
-{% extends "expenses/base.html" %}
-{% block content %}
+{% extends "expenses/base.html" %} {% block content %}
 <div class="card">
-<h3>{{ title }}</h3>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button class="btn" type="submit">Save</button>
-  <a href="{% url 'income_list' %}" class="btn btn-outline">Cancel</a>
-</form>
+  <h3>{{ title }}</h3>
+  <form method="post">
+    {% csrf_token %} {{ form.as_p }}
+    <button class="btn" type="submit">Save</button>
+    <a href="{% url 'income_list' %}" class="btn btn-outline">Cancel</a>
+  </form>
 </div>
 {% endblock %}

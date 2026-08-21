@@ -1,105 +1,305 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Expense Tracker</title>
-<style>
-:root{
-  --primary:#6C5CE7;
-  --primary-dark:#5849c2;
-  --accent:#00CEC9;
-  --bg:#F4F5FB;
-  --card:#FFFFFF;
-  --text:#2D3436;
-  --muted:#7f8c9c;
-  --danger:#FF6B6B;
-  --success:#2ECC71;
-  --border:#E7E9F5;
-}
-*{box-sizing:border-box}
-body{
-  font-family:'Segoe UI',Arial,sans-serif;
-  margin:0;background:var(--bg);color:var(--text);
-}
-.wrap{max-width:960px;margin:0 auto;padding:24px 16px 60px}
-nav{
-  display:flex;justify-content:space-between;align-items:center;
-  background:linear-gradient(135deg,var(--primary),var(--primary-dark));
-  color:#fff;padding:16px 24px;border-radius:0 0 16px 16px;
-  box-shadow:0 4px 12px rgba(108,92,231,.25);
-}
-nav h2{margin:0;font-size:1.3rem}
-nav a{color:#fff;text-decoration:none;font-weight:500;opacity:.9}
-nav a:hover{opacity:1;text-decoration:underline}
-.navlinks{display:flex;gap:16px;align-items:center;font-size:.95rem}
-.tabs{display:flex;gap:10px;margin:20px 0;flex-wrap:wrap}
-.tabs a{
-  padding:8px 16px;border-radius:20px;text-decoration:none;
-  color:var(--primary-dark);background:#EDEBFB;font-weight:600;font-size:.9rem;
-}
-.tabs a.active{background:var(--primary);color:#fff}
-a{color:var(--primary-dark)}
-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--border)}
-th{background:var(--primary);color:#fff;font-weight:600}
-tr:hover td{background:#FAFAFF}
-.btn{
-  display:inline-block;padding:9px 18px;background:var(--primary);color:#fff;
-  border:none;border-radius:8px;cursor:pointer;text-decoration:none;font-weight:600;font-size:.9rem;
-}
-.btn:hover{background:var(--primary-dark)}
-.btn-danger{background:var(--danger)}
-.btn-danger:hover{background:#e05252}
-.btn-outline{background:transparent;border:1.5px solid var(--primary);color:var(--primary-dark)}
-form p{margin:10px 0}
-label{font-weight:600;font-size:.85rem;color:var(--muted);display:block;margin-bottom:4px}
-input,select,textarea{
-  width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;
-  font-size:.95rem;font-family:inherit;background:#fff;
-}
-input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary)}
-.card{background:var(--card);padding:20px;border-radius:14px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:20px}
-.stat{background:var(--card);border-radius:14px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.06);border-left:5px solid var(--primary)}
-.stat.accent{border-left-color:var(--accent)}
-.stat.success{border-left-color:var(--success)}
-.stat.danger{border-left-color:var(--danger)}
-.amt-pos{color:var(--success);font-weight:700}
-.amt-neg{color:var(--danger);font-weight:700}
-.stat h4{margin:0 0 6px;color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.5px}
-.stat .val{font-size:1.6rem;font-weight:700;color:var(--text)}
-.bar-row{display:flex;align-items:center;gap:12px;margin:10px 0}
-.bar-label{width:130px;font-size:.85rem;color:var(--text);font-weight:600}
-.bar-track{flex:1;background:var(--border);border-radius:8px;height:20px;overflow:hidden}
-.bar-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:8px}
-.bar-amt{width:80px;text-align:right;font-size:.85rem;color:var(--muted);font-weight:600}
-.badge{padding:3px 10px;border-radius:12px;font-size:.75rem;font-weight:600;background:#EDEBFB;color:var(--primary-dark)}
-</style>
-</head>
-<body>
-<nav>
-  <h2>💰 ExpenseTracker</h2>
-  <div class="navlinks">
-  {% if user.is_authenticated %}
-    <span>Hi, {{ user.username }}</span> <a href="{% url 'logout' %}">Logout</a>
-  {% else %}
-    <a href="{% url 'login' %}">Login</a> <a href="{% url 'signup' %}">Sign up</a>
-  {% endif %}
-  </div>
-</nav>
-<div class="wrap">
-{% if user.is_authenticated %}
-<div class="tabs">
-  <a href="{% url 'dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">📊 Dashboard</a>
-  <a href="{% url 'expense_list' %}" class="{% if request.resolver_match.url_name == 'expense_list' %}active{% endif %}">📋 Expenses</a>
-  <a href="{% url 'expense_add' %}" class="{% if request.resolver_match.url_name == 'expense_add' %}active{% endif %}">➕ Add Expense</a>
-  <a href="{% url 'income_list' %}" class="{% if request.resolver_match.url_name == 'income_list' %}active{% endif %}">💵 Income</a>
-  <a href="{% url 'income_add' %}" class="{% if request.resolver_match.url_name == 'income_add' %}active{% endif %}">➕ Add Income</a>
-  <a href="{% url 'report' %}" class="{% if request.resolver_match.url_name == 'report' %}active{% endif %}">🧾 Report</a>
-</div>
-{% endif %}
-{% block content %}{% endblock %}
-</div>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Expense Tracker</title>
+    <style>
+      :root {
+        --primary: #6c5ce7;
+        --primary-dark: #5849c2;
+        --accent: #00cec9;
+        --bg: #f4f5fb;
+        --card: #ffffff;
+        --text: #2d3436;
+        --muted: #7f8c9c;
+        --danger: #ff6b6b;
+        --success: #2ecc71;
+        --border: #e7e9f5;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+      }
+      .wrap {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 24px 16px 60px;
+      }
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-dark)
+        );
+        color: #fff;
+        padding: 16px 24px;
+        border-radius: 0 0 16px 16px;
+        box-shadow: 0 4px 12px rgba(108, 92, 231, 0.25);
+      }
+      nav h2 {
+        margin: 0;
+        font-size: 1.3rem;
+      }
+      nav a {
+        color: #fff;
+        text-decoration: none;
+        font-weight: 500;
+        opacity: 0.9;
+      }
+      nav a:hover {
+        opacity: 1;
+        text-decoration: underline;
+      }
+      .navlinks {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        font-size: 0.95rem;
+      }
+      .tabs {
+        display: flex;
+        gap: 10px;
+        margin: 20px 0;
+        flex-wrap: wrap;
+      }
+      .tabs a {
+        padding: 8px 16px;
+        border-radius: 20px;
+        text-decoration: none;
+        color: var(--primary-dark);
+        background: #edebfb;
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+      .tabs a.active {
+        background: var(--primary);
+        color: #fff;
+      }
+      a {
+        color: var(--primary-dark);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background: var(--card);
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+      }
+      th,
+      td {
+        padding: 12px 14px;
+        text-align: left;
+        border-bottom: 1px solid var(--border);
+      }
+      th {
+        background: var(--primary);
+        color: #fff;
+        font-weight: 600;
+      }
+      tr:hover td {
+        background: #fafaff;
+      }
+      .btn {
+        display: inline-block;
+        padding: 9px 18px;
+        background: var(--primary);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+      .btn:hover {
+        background: var(--primary-dark);
+      }
+      .btn-danger {
+        background: var(--danger);
+      }
+      .btn-danger:hover {
+        background: #e05252;
+      }
+      .btn-outline {
+        background: transparent;
+        border: 1.5px solid var(--primary);
+        color: var(--primary-dark);
+      }
+      form p {
+        margin: 10px 0;
+      }
+      label {
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: var(--muted);
+        display: block;
+        margin-bottom: 4px;
+      }
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 9px 12px;
+        border: 1.5px solid var(--border);
+        border-radius: 8px;
+        font-size: 0.95rem;
+        font-family: inherit;
+        background: #fff;
+      }
+      input:focus,
+      select:focus,
+      textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+      }
+      .card {
+        background: var(--card);
+        padding: 20px;
+        border-radius: 14px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 16px;
+        margin-bottom: 20px;
+      }
+      .stat {
+        background: var(--card);
+        border-radius: 14px;
+        padding: 18px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        border-left: 5px solid var(--primary);
+      }
+      .stat.accent {
+        border-left-color: var(--accent);
+      }
+      .stat.success {
+        border-left-color: var(--success);
+      }
+      .stat.danger {
+        border-left-color: var(--danger);
+      }
+      .amt-pos {
+        color: var(--success);
+        font-weight: 700;
+      }
+      .amt-neg {
+        color: var(--danger);
+        font-weight: 700;
+      }
+      .stat h4 {
+        margin: 0 0 6px;
+        color: var(--muted);
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .stat .val {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: var(--text);
+      }
+      .bar-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 10px 0;
+      }
+      .bar-label {
+        width: 130px;
+        font-size: 0.85rem;
+        color: var(--text);
+        font-weight: 600;
+      }
+      .bar-track {
+        flex: 1;
+        background: var(--border);
+        border-radius: 8px;
+        height: 20px;
+        overflow: hidden;
+      }
+      .bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+        border-radius: 8px;
+      }
+      .bar-amt {
+        width: 80px;
+        text-align: right;
+        font-size: 0.85rem;
+        color: var(--muted);
+        font-weight: 600;
+      }
+      .badge {
+        padding: 3px 10px;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        background: #edebfb;
+        color: var(--primary-dark);
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <h2>💰 ExpenseTracker</h2>
+      <div class="navlinks">
+        {% if user.is_authenticated %}
+        <span>Hi, {{ user.username }}</span>
+        <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'signup' %}">Sign up</a>
+        {% endif %}
+      </div>
+    </nav>
+    <div class="wrap">
+      {% if user.is_authenticated %}
+      <div class="tabs">
+        <a
+          href="{% url 'dashboard' %}"
+          class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"
+          >📊 Dashboard</a
+        >
+        <a
+          href="{% url 'expense_list' %}"
+          class="{% if request.resolver_match.url_name == 'expense_list' %}active{% endif %}"
+          >📋 Expenses</a
+        >
+        <a
+          href="{% url 'expense_add' %}"
+          class="{% if request.resolver_match.url_name == 'expense_add' %}active{% endif %}"
+          >➕ Add Expense</a
+        >
+        <a
+          href="{% url 'income_list' %}"
+          class="{% if request.resolver_match.url_name == 'income_list' %}active{% endif %}"
+          >💵 Income</a
+        >
+        <a
+          href="{% url 'income_add' %}"
+          class="{% if request.resolver_match.url_name == 'income_add' %}active{% endif %}"
+          >➕ Add Income</a
+        >
+        <a
+          href="{% url 'report' %}"
+          class="{% if request.resolver_match.url_name == 'report' %}active{% endif %}"
+          >🧾 Report</a
+        >
+      </div>
+      {% endif %} {% block content %}{% endblock %}
+    </div>
+  </body>
 </html>
